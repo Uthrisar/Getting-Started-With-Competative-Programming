@@ -18,5 +18,4 @@ The program implements **Tarjan's Algorithm** using **Depth First Search (DFS)**
 
 The algorithm runs in **O(V + E)** where `V` is the number of vertices and `E` is the number of edges.
 
-
-![Graph of Articulation Points](https://i.sstatic.net/5Uc3C.png)
+<img src="https://i.sstatic.net/5Uc3C.png" alt="Graph of Articulation Points" width="600" height="400">
