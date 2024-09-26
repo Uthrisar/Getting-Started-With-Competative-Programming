@@ -57,7 +57,8 @@ For the given example, the goal is to have at least 1 spaceship reach a distinct
 ## Solution Approach
 
 1. **Calculate Time Matrix:**
-   - - For each spaceship-planet pair, calculate the travel time using the formula:
+   - For each spaceship-planet pair, calculate the travel time using the formula:
+
 \[
 t = \left\lceil \frac{(p - x)^2 + (q - y)^2}{S^2} \right\rceil
 \]
