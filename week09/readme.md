@@ -8,9 +8,10 @@ The mission is considered **successful** if **at least `K` spaceships** successf
 
 ### Time Calculation for Each Journey
 For a spaceship located at coordinates `(x, y)` to reach a planet at `(p, q)`, the time `t` required is defined as:
-\[
-t = \left\lceil \frac{(p - x)^2 + (q - y)^2}{S^2} \right\rceil
-\]
+The time for a spaceship to reach a planet is given by:
+
+$$ t = \left\lceil \frac{(p - x)^2 + (q - y)^2}{S^2} \right\rceil $$
+
 where `S` is the speed of the spaceship. The result `t` is in **minutes**.
 
 ## Input Format
