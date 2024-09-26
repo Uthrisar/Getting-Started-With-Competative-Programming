@@ -28,13 +28,13 @@ where `S` is the speed of the spaceship. The result `t` is in **minutes**.
 For each test case, output the minimum time (in **seconds**) required to complete the space exploration mission such that `K` spaceships explore distinct planets. If it is not possible, print `-1`.
 
 ## Constraints
+- **Number of test cases:** `1 <= t <= 10`
+- **Number of spaceships (N):** `1 <= N <= 200`
+- **Number of planets (M):** `1 <= M <= 200`
+- **Required spaceships for success (K):** `1 <= K <= N`
+- **Coordinate values for ships and planets (x, y, p, q):** `0 <= x, y, p, q <= 10^6`
+- **Speed of each spaceship (S):** `1 <= S <= 50`
 
-- **Number of test cases:** \( 1 \leq t \leq 10 \)
-- **Number of spaceships (N):** \( 1 \leq N \leq 200 \)
-- **Number of planets (M):** \( 1 \leq M \leq 200 \)
-- **Required spaceships for success (K):** \( 1 \leq K \leq N \)
-- **Coordinate values for ships and planets (x, y, p, q):** \( 0 \leq x, y, p, q \leq 10^6 \)
-- **Speed of each spaceship (S):** \( 1 \leq S \leq 50 \)
 
 ## Example
 ### Input
