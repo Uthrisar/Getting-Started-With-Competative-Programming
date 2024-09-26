@@ -1,72 +1,42 @@
-A space exploration mission has been launched by a company called SpaceZ. The spaceships they have are limited in number. They only have N
- spaceships which have no acceleration, only speed. The universe is huge, and with unlimited number of resources they may explore much of it but since the resources SpaceZ has, is limited, they have set a goal to explore M
- planets. 
+# Space Exploration Mission - Minimum Time Analysis
 
-Each of the spaceship can reach any of the M
- planets, but once a spaceship arrives at a particular planet, it is closed off to everyone and cannot be explored by any other spaceship. This has been done so that there is no duplicated effort by their spaceships.
+## Problem Statement
 
-The board of directors have decided that the mission may be deemed successful when K
- spaceships have completed their exploration.
+A space exploration mission has been launched by a company called **SpaceZ**. The mission has limited resources, and the company wants to explore `M` planets using `N` spaceships. Each spaceship has a defined speed and can travel to any of the planets.
 
-You have been hired as an analyst who is provided the coordinates of N
- spaceships in the form (x,y)
- and M
- planets in the form (p,q)
-, along with the speed S
- of each spaceship.
+The mission is considered **successful** if **at least `K` spaceships** successfully reach and explore distinct planets. Once a spaceship explores a planet, it is **closed off** to other spaceships, meaning that no other spaceship can visit the same planet.
 
-Time for a spaceship to go to a planet, is defined as t=⌈(p−x)2+(q−y)2S2⌉
- in minutes.
+### Time Calculation for Each Journey
+For a spaceship located at coordinates `(x, y)` to reach a planet at `(p, q)`, the time `t` required is defined as:
+\[
+t = \left\lceil \frac{(p - x)^2 + (q - y)^2}{S^2} \right\rceil
+\]
+where `S` is the speed of the spaceship. The result `t` is in **minutes**.
 
-You need to find the value of the minimum time needed to complete the space exploration mission i.e the minimum time to reach the goal set by the board of directors of SpaceZ if possible.
+## Input Format
+1. The first line contains a single integer `t` representing the number of test cases.
+2. For each test case:
+   - The first line contains three integers: `N`, `M`, and `K`:
+     - `N`: Number of spaceships
+     - `M`: Number of planets
+     - `K`: Minimum number of spaceships required to successfully reach distinct planets
+   - The next `N` lines each contain two integers: `x` and `y` coordinates of the spaceships.
+   - The following `M` lines each contain two integers: `p` and `q` coordinates of the planets.
+   - The final line contains `N` space-separated integers indicating the speed `S` of each spaceship.
 
-Input
+## Output Format
+For each test case, output the minimum time (in **seconds**) required to complete the space exploration mission such that `K` spaceships explore distinct planets. If it is not possible, print `-1`.
 
-The first line contains a single integer t, the number of test cases. Description of the test cases is as follows:
+## Constraints
+- \( 1 \leq t \leq 10 \)
+- \( 1 \leq N \leq 200 \)
+- \( 1 \leq M \leq 200 \)
+- \( 1 \leq K \leq N \)
+- \( 0 \leq x, y, p, q \leq 10^6 \)
+- \( 1 \leq S \leq 50 \)
 
-The next line of input contains 3 space-separated integers N
- , M
- and K
-.
-
-The next N
- lines, each have 2
--space separated integers x
- and y
-.
-
-The next M
- lines, each have 2
--space separated integers p
- and q
-.
-
-The final line contains N
- space-separated integers indicating S
-.
-
-Constraints 
-
-1≤t≤10
-
-1≤N≤200
-
-1≤M≤200
-
-1≤K≤N
-
-0≤x,y,p,q≤106
-
-1≤S≤50
-
-Output 
-
-For each testcase, get the minimum time needed to complete the space exploration mission i.e the minimum time to reach the goal set by the board of directors of SpaceZ in minutes and display it in seconds. If it is not possible to complete the space exploration, print −1
-.
-
-Example
-
-Input:
+## Example
+### Input
 1
 3 2 1
 1 1
@@ -75,14 +45,99 @@ Input:
 34 59
 14 20
 1 2 3
-Output:
+
+### Output
 2760
-Explanation
 
-To complete the exploration as decided by the board of directors, 1
- spaceship must reach a planet. We see that the spaceship at coordinate (3,3)
- gets this goal done in the minimum time 2760
-s by reaching the planet at coordinate (14,20)
- using the following formula:
+### Explanation
+For the given example, the goal is to have at least 1 spaceship reach a distinct planet in the minimum possible time. The spaceship at `(3, 3)` can reach the planet at `(14, 20)` in a minimum of `2760` seconds using the formula.
 
-t=⌈(3−14)2+(3−20)232⌉min=2760s
+## Solution Approach
+
+1. **Calculate Time Matrix:**
+   - For each spaceship-planet pair, calculate the travel time using the formula:
+   \[
+   t = \left\lceil \frac{(p - x)^2 + (q - y)^2}{S^2} \right\rceil \times 60 \quad \text{(in seconds)}
+   \]
+
+2. **Bipartite Matching:**
+   - Represent the problem as a bipartite graph where:
+     - Spaceships form one set.
+     - Planets form another set.
+     - An edge between spaceship `i` and planet `j` exists if spaceship `i` can reach planet `j` in `t` seconds.
+   - Use **binary search on `t`** to find the minimum time required to match at least `K` spaceships to distinct planets.
+
+3. **Flow Network Construction:**
+   - Build a flow network where:
+     - `Source` connects to all spaceships.
+     - All planets connect to the `Sink`.
+     - Each spaceship-planet pair has an edge only if it can reach in `t` seconds.
+   - Use **maximum bipartite matching** (or **maximum flow**) to check if `K` spaceships can reach distinct planets.
+
+4. **Binary Search on Time:**
+   - Perform binary search on the minimum time required.
+   - For each middle time value `mid` in binary search, construct the flow network and check if a flow of `K` can be achieved.
+   - Adjust search bounds accordingly.
+
+## Implementation Notes
+1. **Edge Cases:**
+   - If `K > M`, it's impossible for `K` spaceships to explore distinct planets, so output `-1`.
+2. **Graph Construction:**
+   - Use adjacency lists for storing the graph.
+   - Store capacities of edges as needed for the flow network.
+
+## Code Implementation
+Here’s a C++ solution outline for the problem:
+
+```cpp
+#include <bits/stdc++.h>
+#define INF 1e16
+using namespace std;
+
+vector<int> graph[402];
+long long capacity[402][402], flow_passed[402][402];
+vector<int> parent(402);
+vector<long long> path_flow(402);
+
+bool find_path(int src, int sink) {
+    fill(parent.begin(), parent.end(), -1);
+    fill(path_flow.begin(), path_flow.end(), 0);
+    queue<int> q;
+    parent[src] = -2;
+    q.push(src);
+    path_flow[src] = INF;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        for (int v : graph[u]) {
+            if (parent[v] == -1 && capacity[u][v] > flow_passed[u][v]) {
+                parent[v] = u;
+                path_flow[v] = min(path_flow[u], capacity[u][v] - flow_passed[u][v]);
+
+                if (v == sink)
+                    return true;
+                q.push(v);
+            }
+        }
+    }
+    return false;
+}
+
+int max_flow(int src, int sink) {
+    int maxFlow = 0;
+    while (find_path(src, sink)) {
+        int flow = path_flow[sink];
+        maxFlow += flow;
+
+        int v = sink;
+        while (v != src) {
+            int u = parent[v];
+            flow_passed[u][v] += flow;
+            flow_passed[v][u] -= flow;
+            v = u;
+        }
+    }
+    return maxFlow;
+}
