@@ -39,14 +39,14 @@ For each test case, output the minimum time (in **seconds**) required to complet
 
 ## Example
 ### Input
-1
-3 2 1
-1 1
-2 2
-3 3
-34 59
-14 20
-1 2 3
+- **1**: Number of test cases.
+- **3 2 1**: Represents `N = 3` (number of spaceships), `M = 2` (number of planets), and `K = 1` (minimum number of spaceships needed).
+- **1 1**: Coordinates of the first spaceship.
+- **2 2**: Coordinates of the second spaceship.
+- **3 3**: Coordinates of the third spaceship.
+- **34 59**: Coordinates of the first planet.
+- **14 20**: Coordinates of the second planet.
+- **1 2 3**: Speeds of the three spaceships.
 
 ### Output
 2760
