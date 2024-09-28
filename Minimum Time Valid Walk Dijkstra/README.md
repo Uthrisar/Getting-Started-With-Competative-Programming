@@ -20,7 +20,7 @@ In the Republic of AtCoder, there are **N** towns (numbered from 1 to N) and **M
 ## Visual Representation
 Below is a visual representation of an example graph with 4 towns and 5 roads:
 
-![Graph Example](graph_example.png)
+![Graph Example](https://d2jdgazzki9vjm.cloudfront.net/tutorial/daa/images/dijkstras-algorithm6.png)
 
 ## Solution Details
 The implementation uses a graph traversal technique with two Dijkstra runs for each town: one on the original graph and another on the reversed graph. This allows us to determine the shortest cycle starting and ending at the same town. The complexity is optimized using a priority queue for the Dijkstra algorithm, making it efficient for larger inputs.
@@ -29,20 +29,22 @@ The implementation uses a graph traversal technique with two Dijkstra runs for e
 Consider a case with **4 towns** and **5 roads**:
 
 ```
-4 5
+4 7
 1 2 10
-2 3 15
-3 1 5
-1 4 20
-4 1 25
+2 3 30
+1 4 15
+3 4 25
+3 4 20
+4 3 20
+4 3 30
 ```
 
 Output:
 ```
-30
 -1
 -1
-45
+40
+40
 ```
 
 ### Explanation:
