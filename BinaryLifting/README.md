@@ -1,6 +1,3 @@
-# Create a README.md file for Binary Lifting
-
-binary_lifting_readme_content = """
 # Binary Lifting
 
 ## Introduction
