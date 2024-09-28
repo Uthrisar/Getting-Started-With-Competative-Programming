@@ -25,77 +25,72 @@ Given a tree with `N` nodes, preprocess the tree for LCA queries. Then, for each
 ```cpp
 #include<bits/stdc++.h>
 using namespace std;
-
-const int MAXN = 100001; // Maximum number of nodes
-const int LOG = 17;      // log2(MAXN) (ensures we can jump to 2^LOG ancestors)
-
-vector<int> adj[MAXN];  // Adjacency list representation of the tree
-int up[MAXN][LOG];      // up[v][j] stores the 2^j-th ancestor of node v
-int depth[MAXN];        // Stores depth of each node
-
-// Precompute up table and depth of each node using DFS
-void dfs(int v, int parent) {
-    up[v][0] = parent; // Immediate parent
-    for (int i = 1; i < LOG; i++) {
-        if (up[v][i - 1] != -1) {
-            up[v][i] = up[up[v][i - 1]][i - 1];
-        } else {
-            up[v][i] = -1;  // No ancestor exists
+ 
+int up[200001][20];
+ 
+int depth[200001];
+ 
+vector<int> g[200001];
+ 
+void dfs(int v, int p=-1){
+    up[v][0]=p;
+    for(int i=1; i<20; i++){
+        if(up[v][i-1] != -1){
+            up[v][i]=up[up[v][i-1]][i-1];
         }
     }
-    for (int u : adj[v]) {
-        if (u != parent) {
-            depth[u] = depth[v] + 1;
-            dfs(u, v);
+    for(int c : g[v]){
+        if(c != p){
+            depth[c]=1+depth[v];
+            dfs(c,v);
         }
     }
 }
-
-// Function to find LCA of nodes u and v
-int lca(int u, int v) {
-    if (depth[u] < depth[v]) swap(u, v); // u should be deeper
-    // Lift u up to the same depth as v
-    int diff = depth[u] - depth[v];
-    for (int i = 0; i < LOG; i++) {
-        if ((diff >> i) & 1) {
-            u = up[u][i];
+ 
+int lift_node(int node, int jump_req){
+    for(int jump=19; jump>=0; jump--){
+        if(node == -1 || jump_req == 0)
+            break;
+        if(jump_req >= (1<<jump)){
+            node = up[node][jump];
+            jump_req -= (1<<jump);
         }
     }
-    if (u == v) return u;  // Same node is LCA
-    // Lift both nodes up until they have the same parent
-    for (int i = LOG - 1; i >= 0; i--) {
-        if (up[u][i] != up[v][i]) {
-            u = up[u][i];
-            v = up[v][i];
+    return node;
+}
+ 
+int lca(int a, int b){
+    if(depth[a] < depth[b])
+        swap(a,b);
+    a = lift_node(a,depth[a]-depth[b]);
+    if(a==b) return a;
+    for(int jump=19; jump>=0; jump--){
+        if(up[a][jump] != up[b][jump]){
+            a=up[a][jump];
+            b=up[b][jump];
         }
     }
-    return up[u][0];  // Return the parent of u (or v) which is the LCA
+    return up[a][0];
 }
-
-int main() {
-    int N;  // Number of nodes
-    cin >> N;
-
-    // Read tree edges
-    for (int i = 1; i < N; i++) {
-        int u, v;
-        cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+ 
+int main(){
+    memset(up,-1,sizeof(up));
+    int n,q;
+    cin>>n>>q;
+    for(int e=2; e<=n; e++){
+        int x;
+        cin >> x;
+        g[e].push_back(x);
+        g[x].push_back(e);
     }
-
-    memset(up, -1, sizeof(up));  // Initialize up table
-    depth[1] = 0;                // Root node depth is 0
-    dfs(1, -1);                  // Start DFS from root (1)
-
-    int Q;  // Number of queries
-    cin >> Q;
-    while (Q--) {
-        int u, v;
-        cin >> u >> v;
-        cout << "LCA of " << u << " and " << v << " is: " << lca(u, v) << endl;
+    dfs(1);
+    while(q--){
+        int a,b;
+        cin>>a>>b;
+        cout<<lca(a,b)<<endl;
     }
 }
+
 6
 1 2
 1 3
