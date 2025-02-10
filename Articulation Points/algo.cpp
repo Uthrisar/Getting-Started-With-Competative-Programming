@@ -6,8 +6,8 @@ class Solution {
     int timer = 1;
     vector<int> articulationPoints(int V, vector<int>adj[]) {
         vector<bool> vis(V,false);
-        vector<int> st(V), low(V), ans;
-        dfs(0,-1,vis,adj,st,low,ans);
+        vector<int> disc(V), low(V), ans;
+        dfs(0,-1,vis,adj,disc,low,ans);
         if(ans.size() == 0) ans.push_back(-1);
         set<int> s;
         for(auto node : ans){
@@ -20,21 +20,21 @@ class Solution {
         return ans;
     }
 
-    void dfs(int v, int par, vector<bool>& vis, vector<int> adj[], vector<int>& st, vector<int>& low, vector<int>& ans){
+    void dfs(int v, int par, vector<bool>& vis, vector<int> adj[], vector<int>& disc, vector<int>& low, vector<int>& ans){
         vis[v] = 1;
-        st[v] = low[v] = timer++;
+        disc[v] = low[v] = timer++;
         int countChild=0;
         for(int child : adj[v]){
             if(child == par) continue;
             if(!vis[child]){
-                dfs(child,v,vis,adj,st,low,ans);
+                dfs(child,v,vis,adj,disc,low,ans);
                 low[v] = min(low[v],low[child]);
-                if(par != -1 && low[child] >= st[v]){
+                if(par != -1 && low[child] >= disc[v]){
                     ans.push_back(v);
                 }
                 countChild++;
             } else {
-                low[v] = min(low[v],st[child]);
+                low[v] = min(low[v],disc[child]);
             }
         }
         if(par == -1 && countChild > 1){
