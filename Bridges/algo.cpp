@@ -6,7 +6,7 @@ using namespace std;
 const int N = 1e5;
 
 int vis[N];
-int st[N];
+int disc[N];
 int low[N];
 vector<int> graph[N];
 
@@ -16,17 +16,17 @@ vector<pair<int,int>> bridges;
 
 void dfs(int v, int par){
     vis[v]=1;
-    st[v] = low[v] = timer++;
+    disc[v] = low[v] = timer++;
     for(int child : graph[v]){
         if(child == par) continue;
         if(!vis[child]){
             dfs(child,v);
-            low[v] = min(low[v],low[child]);
-            if(low[child] > st[v]){
+            low[v] = min(low[v], low[child]);
+            if(low[child] > disc[v]){
                 bridges.push_back(make_pair(v,child));
             }
         } else {
-            low[v] = min(low[v],low[child]);
+            low[v] = min(low[v], disc[child]);
         }
     }
 }
